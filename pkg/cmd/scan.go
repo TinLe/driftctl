@@ -7,6 +7,11 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/jmespath/go-jmespath"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+
 	"github.com/cloudskiff/driftctl/pkg"
 	"github.com/cloudskiff/driftctl/pkg/alerter"
 	cmderrors "github.com/cloudskiff/driftctl/pkg/cmd/errors"
@@ -15,13 +20,10 @@ import (
 	"github.com/cloudskiff/driftctl/pkg/iac/config"
 	"github.com/cloudskiff/driftctl/pkg/iac/supplier"
 	"github.com/cloudskiff/driftctl/pkg/iac/terraform/state/backend"
+	globaloutput "github.com/cloudskiff/driftctl/pkg/output"
 	"github.com/cloudskiff/driftctl/pkg/remote"
 	"github.com/cloudskiff/driftctl/pkg/resource"
 	"github.com/cloudskiff/driftctl/pkg/terraform"
-	"github.com/jmespath/go-jmespath"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
 )
 
 type ScanOptions struct {
@@ -66,6 +68,7 @@ func NewScanCmd() *cobra.Command {
 				return err
 			}
 			opts.Output = *out
+			globaloutput.ChangePrinter(output.GetPrinter(*out))
 
 			filterFlag, _ := cmd.Flags().GetString("filter")
 			if filterFlag != "" {
@@ -122,6 +125,7 @@ func NewScanCmd() *cobra.Command {
 }
 
 func scanRun(opts *ScanOptions) error {
+
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
@@ -161,7 +165,8 @@ func scanRun(opts *ScanOptions) error {
 		return err
 	}
 
-	err = output.GetOutput(opts.Output).Write(analysis)
+	selectedOutput := output.GetOutput(opts.Output)
+	err = selectedOutput.Write(analysis)
 	if err != nil {
 		return err
 	}

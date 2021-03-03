@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"github.com/cloudskiff/driftctl/pkg/analyser"
+	"github.com/cloudskiff/driftctl/pkg/output"
 )
 
 type Output interface {
@@ -55,4 +56,22 @@ func GetOutput(config OutputConfig) Output {
 	default:
 		return NewConsole()
 	}
+}
+
+func GetPrinter(config OutputConfig) output.Printer {
+	switch config.Key {
+	case JSONOutputType:
+		if isStdOut(config.Options["path"]) {
+			return &output.VoidPrinter{}
+		}
+		fallthrough
+	case ConsoleOutputType:
+		fallthrough
+	default:
+		return output.NewConsolePrinter()
+	}
+}
+
+func isStdOut(path string) bool {
+	return path == "/dev/stdout" || path == "stdout"
 }
