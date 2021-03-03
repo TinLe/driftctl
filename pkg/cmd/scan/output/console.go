@@ -2,8 +2,11 @@ package output
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
+
+	"github.com/cloudskiff/driftctl/pkg/output"
 
 	"github.com/cloudskiff/driftctl/pkg/remote"
 
@@ -27,6 +30,10 @@ func NewConsole() *Console {
 	return &Console{
 		`Total coverage is {{ analysis.Coverage }}`,
 	}
+}
+
+func (c *Console) GetInfoPrinter() output.Printer {
+	return output.NewConsolePrinter()
 }
 
 func (c *Console) Write(analysis *analyser.Analysis) error {
@@ -106,7 +113,7 @@ func (c *Console) Write(analysis *analyser.Analysis) error {
 	}
 
 	if enumerationErrorMessage != "" {
-		fmt.Printf("\n%s\n", color.YellowString(enumerationErrorMessage))
+		_, _ = fmt.Fprintf(os.Stderr, "\n%s\n", color.YellowString(enumerationErrorMessage))
 	}
 
 	return nil

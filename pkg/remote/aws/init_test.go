@@ -1,6 +1,8 @@
 package aws
 
-import "github.com/cloudskiff/driftctl/pkg/terraform"
+import (
+	"github.com/cloudskiff/driftctl/pkg/terraform"
+)
 
 func InitTestAwsProvider(providerLibrary *terraform.ProviderLibrary) (*AWSTerraformProvider, error) {
 	provider, err := NewAWSTerraformProvider()

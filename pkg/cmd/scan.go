@@ -7,6 +7,8 @@ import (
 	"strings"
 	"syscall"
 
+	globaloutput "github.com/cloudskiff/driftctl/pkg/output"
+
 	"github.com/cloudskiff/driftctl/pkg"
 	"github.com/cloudskiff/driftctl/pkg/alerter"
 	cmderrors "github.com/cloudskiff/driftctl/pkg/cmd/errors"
@@ -122,6 +124,9 @@ func NewScanCmd() *cobra.Command {
 }
 
 func scanRun(opts *ScanOptions) error {
+	selectedOutput := output.GetOutput(opts.Output)
+	globaloutput.ChangePrinter(selectedOutput.GetInfoPrinter())
+
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
@@ -161,7 +166,7 @@ func scanRun(opts *ScanOptions) error {
 		return err
 	}
 
-	err = output.GetOutput(opts.Output).Write(analysis)
+	err = selectedOutput.Write(analysis)
 	if err != nil {
 		return err
 	}

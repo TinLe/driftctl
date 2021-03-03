@@ -3,11 +3,14 @@ package output
 import (
 	"sort"
 
+	"github.com/cloudskiff/driftctl/pkg/output"
+
 	"github.com/cloudskiff/driftctl/pkg/analyser"
 )
 
 type Output interface {
 	Write(analysis *analyser.Analysis) error
+	GetInfoPrinter() output.Printer
 }
 
 var supportedOutputTypes = []string{
