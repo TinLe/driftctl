@@ -126,7 +126,7 @@ func NewScanCmd() *cobra.Command {
 func scanRun(opts *ScanOptions) error {
 	selectedOutput := output.GetOutput(opts.Output)
 	globaloutput.ChangePrinter(selectedOutput.GetInfoPrinter())
-
+	progress := globaloutput.NewProgress(selectedOutput.GetInfoPrinter())
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
@@ -134,7 +134,7 @@ func scanRun(opts *ScanOptions) error {
 	providerLibrary := terraform.NewProviderLibrary()
 	supplierLibrary := resource.NewSupplierLibrary()
 
-	err := remote.Activate(opts.To, alerter, providerLibrary, supplierLibrary)
+	err := remote.Activate(opts.To, alerter, providerLibrary, supplierLibrary, progress)
 	if err != nil {
 		return err
 	}
@@ -160,7 +160,9 @@ func scanRun(opts *ScanOptions) error {
 		ctl.Stop()
 	}()
 
+	progress.Start()
 	analysis, err := ctl.Run()
+	progress.Stop()
 
 	if err != nil {
 		return err
