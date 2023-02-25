@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/aws/aws-sdk-go v1.34.2
-	github.com/bmatcuk/doublestar/v4 v4.0.1 // indirect
+	github.com/bmatcuk/doublestar/v4 v4.0.1
 	github.com/eapache/go-resiliency v1.2.0
 	github.com/fatih/color v1.9.0
 	github.com/getsentry/sentry-go v0.10.0
@@ -18,7 +18,7 @@ require (
 	github.com/jmespath/go-jmespath v0.3.0
 	github.com/joho/godotenv v1.3.0
 	github.com/mattn/go-colorable v0.1.7 // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.0.4 // indirect
 	github.com/pkg/errors v0.9.1
@@ -33,7 +33,7 @@ require (
 	github.com/yudai/gojsondiff v1.0.0
 	github.com/zclconf/go-cty v1.7.0
 	go.uber.org/atomic v1.4.0
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
+	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 )
